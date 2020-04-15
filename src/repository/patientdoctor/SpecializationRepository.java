@@ -20,8 +20,10 @@ public class SpecializationRepository {
 	public boolean saveSpecialization(Specialization specialization) {
 		boolean isSuccess = false;
 		try {
-			if(specialization != null) 
-				isSuccess = database.executeStatement("INSERT into specialization(specializationname) VALUES(?)", Arrays.asList(specialization.getSpecializationName()));
+			if(specialization != null) {
+				database.executeStatement("INSERT into specialization(specializationname) VALUES(?)", Arrays.asList(specialization.getSpecializationName()));
+				isSuccess = true;
+			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -52,7 +54,8 @@ public class SpecializationRepository {
 	public boolean deleteSpecializationById(int specializationId) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("DELETE FROM specialization where specializationid = ?", Arrays.asList(specializationId));
+			database.executeStatement("DELETE FROM specialization where specializationid = ?", Arrays.asList(specializationId));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -61,7 +64,8 @@ public class SpecializationRepository {
 	public boolean updateSpecializationById(Specialization specialization) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("UPDATE specialization SET specializationname = ? WHERE specializationid = ?", Arrays.asList(specialization.getSpecializationName(), specialization.getSpecializationId()));
+			database.executeStatement("UPDATE specialization SET specializationname = ? WHERE specializationid = ?", Arrays.asList(specialization.getSpecializationName(), specialization.getSpecializationId()));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

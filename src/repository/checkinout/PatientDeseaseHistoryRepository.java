@@ -24,9 +24,10 @@ public class PatientDeseaseHistoryRepository {
 		boolean isSuccess = false;
 		try {
 			if(patientDeseaseHistoryRepository != null) {
-				isSuccess = database.executeStatement("INSERT into patient_desease_history(checkinoutid, deseaseid) VALUES(?, ?)", 
+				database.executeStatement("INSERT into patient_desease_history(checkinoutid, deseaseid) VALUES(?, ?)", 
 							Arrays.asList(patientDeseaseHistory.getCheckInOut().getCheckInOutId(),
 										  patientDeseaseHistory.getDesease().getDeseaseId()));
+				isSuccess = true;
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -52,7 +53,8 @@ public class PatientDeseaseHistoryRepository {
 	public boolean deleteDeseaseHistoryById(int deseaseHistoryId) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("DELETE FROM patient_desease_history where patient_desease_id = ?", Arrays.asList(deseaseHistoryId));
+			database.executeStatement("DELETE FROM patient_desease_history where patient_desease_id = ?", Arrays.asList(deseaseHistoryId));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

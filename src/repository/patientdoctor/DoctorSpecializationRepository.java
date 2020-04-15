@@ -22,10 +22,12 @@ public class DoctorSpecializationRepository {
 	public boolean saveDoctorSpecialization(DoctorSpecialization doctorSpecialization) {
 		boolean isSuccess = false;
 		try {
-			if(doctorSpecialization != null) 
-				isSuccess = database.executeStatement("INSERT into doctor_specialization(specialization_id, doctor_id) VALUES(?, ?)", 
+			if(doctorSpecialization != null) {
+				database.executeStatement("INSERT into doctor_specialization(specialization_id, doctor_id) VALUES(?, ?)", 
 							Arrays.asList(doctorSpecialization.getSpecialiation().getSpecializationId(),
 										  doctorSpecialization.getDoctor().getPersonId()));
+				isSuccess = true;
+			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -50,7 +52,8 @@ public class DoctorSpecializationRepository {
 	public boolean deleteDoctorSpecializationById(int doctorSpecializationId) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("DELETE FROM doctor_specialization where doctor_specialization_id = ?", Arrays.asList(doctorSpecializationId));
+			database.executeStatement("DELETE FROM doctor_specialization where doctor_specialization_id = ?", Arrays.asList(doctorSpecializationId));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -59,7 +62,8 @@ public class DoctorSpecializationRepository {
 	public boolean updateSpecializationById(Specialization specialization) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("UPDATE specialization SET specializationname = ? WHERE specializationid = ?", Arrays.asList(specialization.getSpecializationName(), specialization.getSpecializationId()));
+			database.executeStatement("UPDATE specialization SET specializationname = ? WHERE specializationid = ?", Arrays.asList(specialization.getSpecializationName(), specialization.getSpecializationId()));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

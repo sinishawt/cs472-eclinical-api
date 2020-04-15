@@ -24,9 +24,11 @@ public class UserRepository {
 	public boolean saveUser(User user) {
 		boolean isSuccess = false;
 		try {
-			if(user != null) 
-				isSuccess = database.executeStatement("INSERT into user(username, password, usertypeid, islock, patientordoctorid) VALUES(?, ?, ?, 0, ?)", 
+			if(user != null) {
+				database.executeStatement("INSERT into user(username, password, usertypeid, islock, patientordoctorid) VALUES(?, ?, ?, 0, ?)", 
 													  Arrays.asList(user.getUsername(), user.getPassword(), user.getUserType().getUserTypeId(), user.getPerson().getPersonId()));
+				isSuccess = true;
+			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -85,7 +87,8 @@ public class UserRepository {
 	public boolean deleteUserById(int userId) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("DELETE FROM user where userid = ?", Arrays.asList(userId));
+			database.executeStatement("DELETE FROM user where userid = ?", Arrays.asList(userId));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -94,10 +97,11 @@ public class UserRepository {
 	public boolean updateUserById(User user) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("UPDATE user SET username = ?, password = ?, islock = ? WHERE userid = ?", 
+			database.executeStatement("UPDATE user SET username = ?, password = ?, islock = ? WHERE userid = ?", 
 												   Arrays.asList(user.getUsername(), 
 																 user.getPassword(),
 																 user.isLock()));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

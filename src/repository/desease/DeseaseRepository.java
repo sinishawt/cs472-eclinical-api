@@ -21,9 +21,11 @@ public class DeseaseRepository {
 	public boolean saveDesease(Desease desease) {
 		boolean isSuccess = false;
 		try {
-			if(desease != null) 
-				isSuccess = database.executeStatement("INSERT into desease(deseasename, desease_category_id) VALUES(?, ?)", 
+			if(desease != null) {
+				database.executeStatement("INSERT into desease(deseasename, desease_category_id) VALUES(?, ?)", 
 													  Arrays.asList(desease.getDeseaseName(), desease.getdeseaseCategory().getDeseaseTypeId()));
+				isSuccess = true;
+			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -61,7 +63,8 @@ public class DeseaseRepository {
 	public boolean deleteDeseaseById(int deseaseId) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("DELETE FROM desease where deseaseid = ?", Arrays.asList(deseaseId));
+			database.executeStatement("DELETE FROM desease where deseaseid = ?", Arrays.asList(deseaseId));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -70,10 +73,11 @@ public class DeseaseRepository {
 	public boolean updateDeseaseById(Desease desease) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("UPDATE desease SET deseasename = ?, desease_category_id = ? WHERE deseaseid = ?", 
+			database.executeStatement("UPDATE desease SET deseasename = ?, desease_category_id = ? WHERE deseaseid = ?", 
 												   Arrays.asList(desease.getDeseaseName(), 
 																 desease.getdeseaseCategory().getDeseaseTypeId(),
 																 desease.getDeseaseId()));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

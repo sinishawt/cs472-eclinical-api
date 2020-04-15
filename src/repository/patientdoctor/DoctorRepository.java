@@ -74,7 +74,8 @@ public class DoctorRepository {
 	public boolean deleteDoctorById(int doctorId) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("DELETE FROM doctor where doctorid = ?", Arrays.asList(doctorId));
+			database.executeStatement("DELETE FROM doctor where doctorid = ?", Arrays.asList(doctorId));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -85,7 +86,8 @@ public class DoctorRepository {
 		try {
 			List<Object> parameters = Arrays.asList(doctor.getFirstName(), 
 					doctor.getMiddleName(), doctor.getLastName(), doctor.getContactPhone(), doctor.getAddress(), doctor.getPersonId());
-			isSuccess = database.executeStatement("UPDATE doctor SET firstname = ?, middlename = ?, lastname = ?, contactphone = ?, address = ? WHERE doctorid = ?", parameters);
+			database.executeStatement("UPDATE doctor SET firstname = ?, middlename = ?, lastname = ?, contactphone = ?, address = ? WHERE doctorid = ?", parameters);
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

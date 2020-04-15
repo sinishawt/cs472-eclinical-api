@@ -19,8 +19,10 @@ public class UserTypeRepository {
 	}
 	public boolean saveUserType(UserType userType) throws Exception {
 		boolean isSuccess = false;
-		if(userType != null) 
-			isSuccess = database.executeStatement("INSERT into usertype(usertypename) VALUES(?)", Arrays.asList(userType.getUserTypeName()));
+		if(userType != null) {
+			database.executeStatement("INSERT into usertype(usertypename) VALUES(?)", Arrays.asList(userType.getUserTypeName()));
+			isSuccess = true;
+		}
 		return isSuccess;
 	}
 	public List<UserType> loadUserTypes() throws Exception {
@@ -40,12 +42,14 @@ public class UserTypeRepository {
 	}
 	public boolean deleteUserTypeById(int userTypeId) throws Exception {
 		boolean isSuccess = false;
-		isSuccess = database.executeStatement("DELETE FROM usertype where usertypeid = ?", Arrays.asList(userTypeId));
+		database.executeStatement("DELETE FROM usertype where usertypeid = ?", Arrays.asList(userTypeId));
+		isSuccess = true;
 		return isSuccess;
 	}
 	public boolean updateUserTypeById(UserType userType) throws Exception {
 		boolean isSuccess = false;
-		isSuccess = database.executeStatement("UPDATE usertype SET usertypename = ? WHERE usertypeid = ?", Arrays.asList(userType.getUserTypeName(), userType.getUserTypeId()));
+		database.executeStatement("UPDATE usertype SET usertypename = ? WHERE usertypeid = ?", Arrays.asList(userType.getUserTypeName(), userType.getUserTypeId()));
+		isSuccess = true;
 		return isSuccess;
 	}
 }

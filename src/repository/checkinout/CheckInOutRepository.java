@@ -25,13 +25,14 @@ public class CheckInOutRepository {
 		boolean isSuccess = false;
 		try {
 			if(checkInOut != null) {
-				isSuccess = database.executeStatement("INSERT into checkinout(appointmentid, doctorid, checkindatetime, checkoutdatetime, charge, description) VALUES(?, ?, ?, ?, ?, ?)", 
+				database.executeStatement("INSERT into checkinout(appointmentid, doctorid, checkindatetime, checkoutdatetime, charge, description) VALUES(?, ?, ?, ?, ?, ?)", 
 							Arrays.asList(checkInOut.getAppointment().getAppointmentId(),
 										  checkInOut.getDoctor().getPersonId(),
 										  checkInOut.getCheckInDateTime(),
 										  checkInOut.getCheckOutDateTime(),
 										  checkInOut.getCharge(),
 										  checkInOut.getDescription()));
+				isSuccess = true;
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -85,7 +86,8 @@ public class CheckInOutRepository {
 	public boolean deleteCheckInOutById(int checkInOutId) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("DELETE FROM checkinout where checkinoutid = ?", Arrays.asList(checkInOutId));
+			database.executeStatement("DELETE FROM checkinout where checkinoutid = ?", Arrays.asList(checkInOutId));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

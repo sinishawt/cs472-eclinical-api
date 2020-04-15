@@ -21,9 +21,11 @@ public class MedicineRepository {
 	public boolean saveMedicine(Medicine medicine) {
 		boolean isSuccess = false;
 		try {
-			if(medicine != null) 
-				isSuccess = database.executeStatement("INSERT into medicine(medicinename, medicinetypeid) VALUES(?, ?)", 
+			if(medicine != null) {
+				database.executeStatement("INSERT into medicine(medicinename, medicinetypeid) VALUES(?, ?)", 
 													  Arrays.asList(medicine.getMedicineName(), medicine.getMedicineType().getMedicineTypeId()));
+				isSuccess = true;
+			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -60,7 +62,8 @@ public class MedicineRepository {
 	public boolean deleteMedicineById(int medicineId) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("DELETE FROM medicine where medicineid = ?", Arrays.asList(medicineId));
+			database.executeStatement("DELETE FROM medicine where medicineid = ?", Arrays.asList(medicineId));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -69,10 +72,11 @@ public class MedicineRepository {
 	public boolean updateMedicineById(Medicine medicine) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("UPDATE medicine SET medicinename = ?, medicinetypeid = ? WHERE medicineid = ?", 
+			database.executeStatement("UPDATE medicine SET medicinename = ?, medicinetypeid = ? WHERE medicineid = ?", 
 												   Arrays.asList(medicine.getMedicineName(), 
 																 medicine.getMedicineType().getMedicineTypeId(),
 																 medicine.getMedicineId()));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

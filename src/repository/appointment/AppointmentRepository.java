@@ -30,12 +30,13 @@ public class AppointmentRepository {
 				ResultSet result = database.getResult("SELECT IFNULL(MAX(RIGHT(appointment_number, LENGTH(doctor_number) - 3)),0) + 1 As appointment_number FROM appointment", null);
 				if(result.next())
 					appointment.setAppointmentNumber("AP#" + result.getInt("appointment_number"));
-				isSuccess = database.executeStatement("INSERT into appointment(appointment_number, appointmentdate, appointmenttime, specializationid, appointedby) VALUES(?, ?, ?, ?, ?)", 
+				database.executeStatement("INSERT into appointment(appointment_number, appointmentdate, appointmenttime, specializationid, appointedby) VALUES(?, ?, ?, ?, ?)", 
 							Arrays.asList(appointment.getAppointmentNumber(),
 										  appointment.getAppointmentDate(),
 										  appointment.getAppointmentTime(),
 										  appointment.getSpecialization().getSpecializationId(),
 										  appointment.getAppointedBy().getUserId()));
+				isSuccess = true;
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -87,7 +88,8 @@ public class AppointmentRepository {
 	public boolean deleteAppointmentById(int appointmentId) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("DELETE FROM appointment where appointmentid = ?", Arrays.asList(appointmentId));
+			database.executeStatement("DELETE FROM appointment where appointmentid = ?", Arrays.asList(appointmentId));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -96,8 +98,9 @@ public class AppointmentRepository {
 	public boolean updateAppointmentById(Appointment appointment) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("UPDATE appointment SET appointmentdate = ?, appointmenttime = ?, specializationid = ?, appointedby = ? WHERE appointmentid = ?", 
+			database.executeStatement("UPDATE appointment SET appointmentdate = ?, appointmenttime = ?, specializationid = ?, appointedby = ? WHERE appointmentid = ?", 
 					Arrays.asList(appointment.getAppointmentDate(), appointment.getAppointmentTime(), appointment.getSpecialization().getSpecializationId(), appointment.getAppointedBy().getUserId()));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

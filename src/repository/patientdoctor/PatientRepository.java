@@ -27,8 +27,9 @@ public class PatientRepository {
 					patient.setPersonNumber("PT#" + result.getInt("patient_number"));
 				List<Object> parameters = Arrays.asList(patient.getPersonNumber(), patient.getFirstName(), 
 						patient.getMiddleName(), patient.getLastName(), patient.getContactPhone(), patient.getAddress());
-				isSuccess = database.executeStatement("INSERT INTO patient(patient_number, firstname, middlename, lastname, contactphone, address) "
+				database.executeStatement("INSERT INTO patient(patient_number, firstname, middlename, lastname, contactphone, address) "
 						+ "VALUES(?, ?, ?, ?, ?, ?)", parameters);
+				isSuccess = true;
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -74,7 +75,8 @@ public class PatientRepository {
 	public boolean deletePatientById(int patientId) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("DELETE FROM patient where patientid = ?", Arrays.asList(patientId));
+			database.executeStatement("DELETE FROM patient where patientid = ?", Arrays.asList(patientId));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -85,7 +87,8 @@ public class PatientRepository {
 		try {
 			List<Object> parameters = Arrays.asList(patient.getFirstName(), 
 					patient.getMiddleName(), patient.getLastName(), patient.getContactPhone(), patient.getAddress(), patient.getPersonId());
-			isSuccess = database.executeStatement("UPDATE patient SET firstname = ?, middlename = ?, lastname = ?, contactphone = ?, address = ? WHERE patientid = ?", parameters);
+			database.executeStatement("UPDATE patient SET firstname = ?, middlename = ?, lastname = ?, contactphone = ?, address = ? WHERE patientid = ?", parameters);
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

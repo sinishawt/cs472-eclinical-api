@@ -20,8 +20,10 @@ public class MedicineTypeRepository {
 	public boolean saveMedicineType(MedicineType medicineType) {
 		boolean isSuccess = false;
 		try {
-			if(medicineType != null) 
-				isSuccess = database.executeStatement("INSERT into medicinetype(medicinetypename) VALUES(?)", Arrays.asList(medicineType.getMedicineTypeName()));
+			if(medicineType != null) {
+				database.executeStatement("INSERT into medicinetype(medicinetypename) VALUES(?)", Arrays.asList(medicineType.getMedicineTypeName()));
+				isSuccess = true;
+			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -52,7 +54,8 @@ public class MedicineTypeRepository {
 	public boolean deleteMedicineTypeById(int medicineTypeId) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("DELETE FROM medicinetype where medicinetypeid = ?", Arrays.asList(medicineTypeId));
+			database.executeStatement("DELETE FROM medicinetype where medicinetypeid = ?", Arrays.asList(medicineTypeId));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -61,7 +64,8 @@ public class MedicineTypeRepository {
 	public boolean updateMedicineTypeById(MedicineType medicineType) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = database.executeStatement("UPDATE medicinetype SET medicinetypename = ? WHERE medicinetypeid = ?", Arrays.asList(medicineType.getMedicineTypeName(), medicineType.getMedicineTypeId()));
+			database.executeStatement("UPDATE medicinetype SET medicinetypename = ? WHERE medicinetypeid = ?", Arrays.asList(medicineType.getMedicineTypeName(), medicineType.getMedicineTypeId()));
+			isSuccess = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
