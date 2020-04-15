@@ -13,6 +13,7 @@ public class CheckInOut {
 	private LocalDateTime checkOutDateTime;
 	private double charge;
 	private String description;
+	public CheckInOut() {}
 	public CheckInOut(int checkInOutId, Appointment appointment, Person doctor, LocalDateTime checkInDateTime,
 			LocalDateTime checkOutDateTime, double charge, String description) {
 		super();

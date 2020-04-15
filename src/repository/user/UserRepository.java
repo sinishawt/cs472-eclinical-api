@@ -9,6 +9,8 @@ import dao.Database;
 import model.doctorpatient.Person;
 import model.user.User;
 import model.user.UserType;
+import repository.patientdoctor.DoctorRepository;
+import repository.patientdoctor.PatientRepository;
 
 public class UserRepository {
 	private static UserRepository userRepository;
@@ -32,32 +34,20 @@ public class UserRepository {
 	}
 	public List<User> loadUsers() {
 		List<User> users = new ArrayList<>();
+		UserTypeRepository userTypeRepo = UserTypeRepository.getInstance();
+		PatientRepository patientRepo = PatientRepository.getInstance();
+		DoctorRepository doctorRepo = DoctorRepository.getInstance();
 		try {
 			ResultSet userResult = database.getResult("SELECT * FROM user", null);
 			while(userResult.next()) {
-				UserType userType = new UserType();
-				ResultSet userTypeResult = database.getResult("SELECT * FROM usertype WHERE usertypeid = ?", Arrays.asList(userResult.getInt("usertypeid")));
-				if(userTypeResult.next()) 
-					userType = new UserType(userTypeResult.getInt(1), userTypeResult.getString(2));
+				UserType userType = userTypeRepo.loadUserTypeById(userResult.getInt("usertypeid"));
 				
-				ResultSet patientOrDoctorResult = null;
 				Person patientOrDoctor = new Person();
 				if(userType.getUserTypeId() == 2) //patient
-					patientOrDoctorResult = database.getResult("SELECT * FROM patient WHERE patientid = ?", Arrays.asList(userResult.getInt("patientordoctorid")));
+					patientOrDoctor = patientRepo.loadPatientById(userResult.getInt("patientordoctorid"));
 				else if(userType.getUserTypeId() == 3) //doctor
-					patientOrDoctorResult = database.getResult("SELECT * FROM doctor WHERE doctorid = ?", Arrays.asList(userResult.getInt("patientordoctorid")));
-				
-				if(patientOrDoctorResult != null) { 
-					if(patientOrDoctorResult.next()) 
-						patientOrDoctor = new Person(patientOrDoctorResult.getInt(1), 
-													 patientOrDoctorResult.getString(2), 
-													 patientOrDoctorResult.getString(3), 
-													 patientOrDoctorResult.getString(4), 
-													 patientOrDoctorResult.getString(5), 
-													 patientOrDoctorResult.getString(6), 
-													 patientOrDoctorResult.getString(7));
-				}
-				
+					patientOrDoctor = doctorRepo.loadDoctorById(userResult.getInt("patientordoctorid"));
+						
 				users.add(new User(userResult.getInt("userid"), userResult.getString("username"), 
 								   userResult.getString("password"), userResult.getBoolean("islock"), 
 								   userType, patientOrDoctor));
@@ -66,6 +56,31 @@ public class UserRepository {
 			ex.printStackTrace();
 		}
 		return users;
+	}
+	public User loadUserById(int userId) {
+		User user = new User();
+		UserTypeRepository userTypeRepo = UserTypeRepository.getInstance();
+		PatientRepository patientRepo = PatientRepository.getInstance();
+		DoctorRepository doctorRepo = DoctorRepository.getInstance();
+		try {
+			ResultSet userResult = database.getResult("SELECT * FROM user WHERE userid = ?", Arrays.asList(userId));
+			if(userResult.next()) {
+				UserType userType = userTypeRepo.loadUserTypeById(userResult.getInt("usertypeid"));
+				
+				Person patientOrDoctor = new Person();
+				if(userType.getUserTypeId() == 2) //patient
+					patientOrDoctor = patientRepo.loadPatientById(userResult.getInt("patientordoctorid"));
+				else if(userType.getUserTypeId() == 3) //doctor
+					patientOrDoctor = doctorRepo.loadDoctorById(userResult.getInt("patientordoctorid"));
+						
+				user = new User(userResult.getInt("userid"), userResult.getString("username"), 
+								userResult.getString("password"), userResult.getBoolean("islock"), 
+								userType, patientOrDoctor);
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return user;
 	}
 	public boolean deleteUserById(int userId) {
 		boolean isSuccess = false;

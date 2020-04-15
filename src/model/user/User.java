@@ -9,7 +9,7 @@ public class User {
 	private boolean isLock;
 	private UserType userType;
 	private Person person;
-	
+	public User() {}
 	public User(String username, String password, UserType userType, Person person) {
 		super();
 		this.username = username;

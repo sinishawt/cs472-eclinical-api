@@ -4,6 +4,7 @@ public class Desease {
 	private int deseaseId;
 	private String deseaseName;
 	private DeseaseCategory deseaseCategory;
+	public Desease() {}
 	public Desease(int deseaseId, String deseaseName, DeseaseCategory deseaseCategory) {
 		super();
 		this.deseaseId = deseaseId;

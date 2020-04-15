@@ -31,13 +31,23 @@ public class MedicineTypeRepository {
 		List<MedicineType> medicineTypes = new ArrayList<>();
 		try {
 			ResultSet result = database.getResult("SELECT * FROM medicinetype", null);
-			while(result.next()) {
+			while(result.next()) 
 				medicineTypes.add(new MedicineType(result.getInt(1), result.getString(2)));
-			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
 		return medicineTypes;
+	}
+	public MedicineType loadMedicineTypeById(int medicineTypeId) {
+		MedicineType medicineType = new MedicineType();
+		try {
+			ResultSet result = database.getResult("SELECT * FROM medicinetype WHERE medicinetypeid = ?", Arrays.asList(medicineTypeId));
+			if(result.next()) 
+				medicineType = new MedicineType(result.getInt(1), result.getString(2));
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return medicineType;
 	}
 	public boolean deleteMedicineTypeById(int medicineTypeId) {
 		boolean isSuccess = false;

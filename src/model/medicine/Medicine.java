@@ -4,6 +4,7 @@ public class Medicine {
 	private int medicineId;
 	private String medicineName;
 	private MedicineType medicineType;
+	public Medicine() {}
 	public Medicine(int medicineId, String medicineName, MedicineType medicineType) {
 		super();
 		this.medicineId = medicineId;

@@ -53,6 +53,24 @@ public class PatientRepository {
 		}
 		return patients;
 	}
+	public Person loadPatientById(int patientId) {
+		Person patient = new Person();
+		try {
+			ResultSet result = database.getResult("SELECT * FROM patient WHERE patientid = ?", Arrays.asList(patientId));
+			if(result.next()) {
+				patient = new Person(result.getInt(1), 
+									result.getString(2), 
+									result.getString(3), 
+									result.getString(4), 
+									result.getString(5), 
+									result.getString(6), 
+									result.getString(7));
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return patient;
+	}
 	public boolean deletePatientById(int patientId) {
 		boolean isSuccess = false;
 		try {

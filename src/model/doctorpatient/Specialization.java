@@ -3,6 +3,7 @@ package model.doctorpatient;
 public class Specialization {
 	private int specializationId;
 	private String specializationName;
+	public Specialization() {}
 	public Specialization(int specializationId, String specializationName) {
 		super();
 		this.specializationId = specializationId;

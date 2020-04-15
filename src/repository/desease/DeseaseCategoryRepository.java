@@ -31,13 +31,23 @@ public class DeseaseCategoryRepository {
 		List<DeseaseCategory> deseaseCategories = new ArrayList<>();
 		try {
 			ResultSet result = database.getResult("SELECT * FROM desease_category", null);
-			while(result.next()) {
+			while(result.next()) 
 				deseaseCategories.add(new DeseaseCategory(result.getInt(1), result.getString(2)));
-			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
 		return deseaseCategories;
+	}
+	public DeseaseCategory loadDeseaseCategoryById(int deseaseCategoryId) {
+		DeseaseCategory deseaseCategory = new DeseaseCategory();
+		try {
+			ResultSet result = database.getResult("SELECT * FROM desease_category WHERE deseasecategoryid = ?", Arrays.asList(deseaseCategoryId));
+			if(result.next()) 
+				deseaseCategory = new DeseaseCategory(result.getInt(1), result.getString(2));
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return deseaseCategory;
 	}
 	public boolean deleteDeseaseCategoryById(int deseaseCategoryId) {
 		boolean isSuccess = false;

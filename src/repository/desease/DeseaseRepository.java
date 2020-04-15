@@ -31,19 +31,32 @@ public class DeseaseRepository {
 	}
 	public List<Desease> loadDeseases() {
 		List<Desease> deseases = new ArrayList<>();
+		DeseaseCategoryRepository deseaseCategoryRepo = DeseaseCategoryRepository.getInstance();
 		try {
 			ResultSet deseaseResult = database.getResult("SELECT * FROM desease", null);
 			while(deseaseResult.next()) {
-				DeseaseCategory deseaseCategory = new DeseaseCategory();
-				ResultSet deseaseCategoryResult = database.getResult("SELECT * FROM desease_category WHERE deseasecategoryid = ?", Arrays.asList(deseaseResult.getInt("desease_category_id")));
-				if(deseaseCategoryResult.next()) 
-					deseaseCategory = new DeseaseCategory(deseaseCategoryResult.getInt(1), deseaseCategoryResult.getString(2));
+				DeseaseCategory deseaseCategory = deseaseCategoryRepo.loadDeseaseCategoryById(deseaseResult.getInt("desease_category_id"));
 				deseases.add(new Desease(deseaseResult.getInt(1), deseaseResult.getString(2), deseaseCategory));
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
 		return deseases;
+	
+	}
+	public Desease loadDeseaseById(int deseaseId) {
+		Desease desease = new Desease();
+		DeseaseCategoryRepository deseaseCategoryRepo = DeseaseCategoryRepository.getInstance();
+		try {
+			ResultSet deseaseResult = database.getResult("SELECT * FROM desease WHERE deseaseid = ?", Arrays.asList(deseaseId));
+			if(deseaseResult.next()) {
+				DeseaseCategory deseaseCategory = deseaseCategoryRepo.loadDeseaseCategoryById(deseaseResult.getInt("desease_category_id"));
+				desease = new Desease(deseaseResult.getInt(1), deseaseResult.getString(2), deseaseCategory);
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return desease;
 	}
 	public boolean deleteDeseaseById(int deseaseId) {
 		boolean isSuccess = false;

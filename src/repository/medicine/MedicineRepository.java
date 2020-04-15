@@ -31,14 +31,26 @@ public class MedicineRepository {
 	}
 	public List<Medicine> loadMedicines() {
 		List<Medicine> medicines = new ArrayList<>();
+		MedicineTypeRepository medicineTypeRepo = MedicineTypeRepository.getInstance();
 		try {
 			ResultSet medicineResult = database.getResult("SELECT * FROM medicine", null);
 			while(medicineResult.next()) {
-				MedicineType medicineType = new MedicineType();
-				ResultSet medicineTypeResult = database.getResult("SELECT * FROM medicinetype WHERE medicinetypeid = ?", Arrays.asList(medicineResult.getInt("medicinetypeid")));
-				if(medicineTypeResult.next()) 
-					medicineType = new MedicineType(medicineTypeResult.getInt(1), medicineTypeResult.getString(2));
+				MedicineType medicineType = medicineTypeRepo.loadMedicineTypeById(medicineResult.getInt("medicinetypeid"));
 				medicines.add(new Medicine(medicineResult.getInt(1), medicineResult.getString(2), medicineType));
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return medicines;
+	}
+	public Medicine loadMedicineById(int medicineId) {
+		Medicine medicines = new Medicine();
+		MedicineTypeRepository medicineTypeRepo = MedicineTypeRepository.getInstance();
+		try {
+			ResultSet medicineResult = database.getResult("SELECT * FROM medicine WHERE medicineid = ?", Arrays.asList(medicineId));
+			if(medicineResult.next()) {
+				MedicineType medicineType = medicineTypeRepo.loadMedicineTypeById(medicineResult.getInt("medicinetypeid"));
+				medicines = new Medicine(medicineResult.getInt(1), medicineResult.getString(2), medicineType);
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();

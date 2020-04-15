@@ -13,6 +13,7 @@ public class Appointment {
 	private LocalTime appointmentTime;
 	private Specialization specialization;
 	private User appointedBy;
+	public Appointment() {}
 	public Appointment(int appointmentId, String appointmentNumber, LocalDate appointmentDate,
 			LocalTime appointmentTime, Specialization specialization, User appointedBy) {
 		super();

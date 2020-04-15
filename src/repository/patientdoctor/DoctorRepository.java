@@ -53,6 +53,24 @@ public class DoctorRepository {
 		}
 		return doctors;
 	}
+	public Person loadDoctorById(int doctorId) {
+		Person doctor = new Person();
+		try {
+			ResultSet result = database.getResult("SELECT * FROM doctor WHERE doctorid = ?", Arrays.asList(doctorId));
+			if(result.next()) {
+				doctor = new Person(result.getInt(1), 
+									result.getString(2), 
+									result.getString(3), 
+									result.getString(4), 
+									result.getString(5), 
+									result.getString(6), 
+									result.getString(7));
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return doctor;
+	}
 	public boolean deleteDoctorById(int doctorId) {
 		boolean isSuccess = false;
 		try {

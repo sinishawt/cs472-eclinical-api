@@ -39,6 +39,17 @@ public class UserTypeRepository {
 		}
 		return userTypes;
 	}
+	public UserType loadUserTypeById(int userTypeId) {
+		UserType userType = new UserType();
+		try {
+			ResultSet result = database.getResult("SELECT * FROM usertype WHERE usertypeid", Arrays.asList(userTypeId));
+			if(result.next()) 
+				userType = new UserType(result.getInt(1), result.getString(2));
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return userType;
+	}
 	public boolean deleteUserTypeById(int userTypeId) {
 		boolean isSuccess = false;
 		try {
