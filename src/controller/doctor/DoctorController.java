@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import repository.patientdoctor.DoctorRepository;
 import repository.patientdoctor.DoctorSpecializationRepository;
 
 @WebServlet("/api/doctorcontroller")
+@MultipartConfig
 public class DoctorController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private DoctorRepository doctorRepo = DoctorRepository.getInstance();
