@@ -10,6 +10,12 @@ public class User {
 	private UserType userType;
 	private Person person;
 	public User() {}
+	
+	public User(int userId) {
+		super();
+		this.userId = userId;
+	}
+
 	public User(String username, String password, UserType userType, Person person) {
 		super();
 		this.username = username;

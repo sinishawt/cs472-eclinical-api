@@ -51,7 +51,7 @@ public class UserRepository {
 					patientOrDoctor = doctorRepo.loadDoctorById(userResult.getInt("patientordoctorid"));
 						
 				users.add(new User(userResult.getInt("userid"), userResult.getString("username"), 
-								   userResult.getString("password"), userResult.getBoolean("islock"), 
+								   "", userResult.getBoolean("islock"), 
 								   userType, patientOrDoctor));
 			}
 		}catch(Exception ex) {
