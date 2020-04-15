@@ -16,7 +16,7 @@ import dao.Response;
 import model.user.User;
 import repository.user.UserRepository;
 
-@WebServlet("api/userlogincontroller")
+@WebServlet("/api/userlogincontroller")
 public class UserLoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private UserRepository userRepo = UserRepository.getInstance();

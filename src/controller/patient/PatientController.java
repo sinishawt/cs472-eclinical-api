@@ -1,4 +1,4 @@
-package controller.user;
+package controller.patient;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,27 +14,27 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import dao.Response;
-import model.doctorpatient.Specialization;
-import repository.patientdoctor.SpecializationRepository;
+import model.doctorpatient.Person;
+import repository.patientdoctor.PatientRepository;
 
-@WebServlet("/api/specializationcontroller")
-public class SpecializationController extends HttpServlet {
+@WebServlet("/api/patientcontroller")
+public class PatientController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private SpecializationRepository specializationRepo = SpecializationRepository.getInstance();
+	private PatientRepository patientRepo = PatientRepository.getInstance();
 	private Gson gson = new GsonBuilder().create();
-    
-    public SpecializationController() {
+	
+    public PatientController() {
         super();
     }
-    
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Specialization> specializations = new ArrayList<Specialization>();
+		List<Person> patients = new ArrayList<Person>();
 		Response res = new Response();
 		try {
-			specializations = specializationRepo.loadSpecializations();
-			res = new Response("succeed", 200, specializations);
+			patients = patientRepo.loadPatients();
+			res = new Response("succeed", 200, patients);
 		}catch(Exception ex) {
-			res = new Response(ex.getMessage(), 500, specializations);
+			res = new Response(ex.getMessage(), 500, patients);
 		}
 		response.getWriter().print(gson.toJson(res));
 	}
@@ -42,8 +42,12 @@ public class SpecializationController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Response res = new Response();
 		try {
-			String specializationName = request.getParameter("specialization_name");
-			boolean isSuccess = specializationRepo.saveSpecialization(new Specialization(specializationName));
+			String firstName = request.getParameter("first_name");
+			String middleName = request.getParameter("middle_name");
+			String lastName = request.getParameter("last_name");
+			String contactPhone = request.getParameter("contact_phone");
+			String address = request.getParameter("address");
+			boolean isSuccess = patientRepo.savePatient(new Person(firstName, middleName, lastName, contactPhone, address));
 			if(isSuccess)
 				res = new Response("succeed", 200, null);
 			else
@@ -57,9 +61,13 @@ public class SpecializationController extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Response res = new Response();
 		try {
-			int specializationId = Integer.parseInt(request.getParameter("specialization_id"));
-			String specializationName = request.getParameter("specialization_name");
-			boolean isSuccess = specializationRepo.updateSpecializationById(new Specialization(specializationId, specializationName));
+			int patientId = Integer.parseInt(request.getParameter("patient_id"));
+			String firstName = request.getParameter("first_name");
+			String middleName = request.getParameter("middle_name");
+			String lastName = request.getParameter("last_name");
+			String contactPhone = request.getParameter("contact_phone");
+			String address = request.getParameter("address");
+			boolean isSuccess = patientRepo.updatePatientById(new Person(patientId, firstName, middleName, lastName, contactPhone, address));
 			if(isSuccess)
 				res = new Response("succeed", 200, null);
 			else
@@ -74,8 +82,8 @@ public class SpecializationController extends HttpServlet {
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Response res = new Response();
 		try {
-			int specialization_id = Integer.parseInt(request.getParameter("specialization_id"));
-			boolean isSuccess = specializationRepo.deleteSpecializationById(specialization_id);
+			int patientId = Integer.parseInt(request.getParameter("patient_id"));
+			boolean isSuccess = patientRepo.deletePatientById(patientId);
 			if(isSuccess)
 				res = new Response("succeed", 200, null);
 			else

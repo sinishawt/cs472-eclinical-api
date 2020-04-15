@@ -1,4 +1,4 @@
-package controller.user;
+package controller.doctor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,27 +14,31 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import dao.Response;
+import model.doctorpatient.DoctorSpecialization;
 import model.doctorpatient.Person;
-import repository.patientdoctor.PatientRepository;
+import model.doctorpatient.Specialization;
+import repository.patientdoctor.DoctorRepository;
+import repository.patientdoctor.DoctorSpecializationRepository;
 
-@WebServlet("/api/patientcontroller")
-public class PatientController extends HttpServlet {
+@WebServlet("/api/doctorcontroller")
+public class DoctorController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private PatientRepository patientRepo = PatientRepository.getInstance();
+	private DoctorRepository doctorRepo = DoctorRepository.getInstance();
+	private DoctorSpecializationRepository doctorSpecializationRepo = DoctorSpecializationRepository.getInstance();
 	private Gson gson = new GsonBuilder().create();
 	
-    public PatientController() {
+    public DoctorController() {
         super();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Person> patients = new ArrayList<Person>();
+		List<Person> doctors = new ArrayList<Person>();
 		Response res = new Response();
 		try {
-			patients = patientRepo.loadPatients();
-			res = new Response("succeed", 200, patients);
+			doctors = doctorRepo.loadDoctors();
+			res = new Response("succeed", 200, doctors);
 		}catch(Exception ex) {
-			res = new Response(ex.getMessage(), 500, patients);
+			res = new Response(ex.getMessage(), 500, doctors);
 		}
 		response.getWriter().print(gson.toJson(res));
 	}
@@ -47,8 +51,11 @@ public class PatientController extends HttpServlet {
 			String lastName = request.getParameter("last_name");
 			String contactPhone = request.getParameter("contact_phone");
 			String address = request.getParameter("address");
-			boolean isSuccess = patientRepo.savePatient(new Person(firstName, middleName, lastName, contactPhone, address));
-			if(isSuccess)
+			int doctorId = doctorRepo.saveDoctor(new Person(firstName, middleName, lastName, contactPhone, address));
+			String[] specializations = request.getParameterValues("specializations");
+			for(String sp: specializations)
+				doctorSpecializationRepo.saveDoctorSpecialization(new DoctorSpecialization(new Specialization(Integer.parseInt(sp)), new Person(doctorId)));
+			if(doctorId != 0)
 				res = new Response("succeed", 200, null);
 			else
 				res = new Response("failed", 500, null);
@@ -61,13 +68,13 @@ public class PatientController extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Response res = new Response();
 		try {
-			int patientId = Integer.parseInt(request.getParameter("patient_id"));
+			int doctorId = Integer.parseInt(request.getParameter("doctor_id"));
 			String firstName = request.getParameter("first_name");
 			String middleName = request.getParameter("middle_name");
 			String lastName = request.getParameter("last_name");
 			String contactPhone = request.getParameter("contact_phone");
 			String address = request.getParameter("address");
-			boolean isSuccess = patientRepo.updatePatientById(new Person(patientId, firstName, middleName, lastName, contactPhone, address));
+			boolean isSuccess = doctorRepo.updateDoctorById(new Person(doctorId, firstName, middleName, lastName, contactPhone, address));
 			if(isSuccess)
 				res = new Response("succeed", 200, null);
 			else
@@ -82,8 +89,8 @@ public class PatientController extends HttpServlet {
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Response res = new Response();
 		try {
-			int patientId = Integer.parseInt(request.getParameter("patient_id"));
-			boolean isSuccess = patientRepo.deletePatientById(patientId);
+			int doctorId = Integer.parseInt(request.getParameter("doctor_id"));
+			boolean isSuccess = doctorRepo.deleteDoctorById(doctorId);
 			if(isSuccess)
 				res = new Response("succeed", 200, null);
 			else
