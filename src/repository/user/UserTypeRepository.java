@@ -33,7 +33,7 @@ public class UserTypeRepository {
 	}
 	public UserType loadUserTypeById(int userTypeId) throws Exception {
 		UserType userType = new UserType();
-		ResultSet result = database.getResult("SELECT * FROM usertype WHERE usertypeid", Arrays.asList(userTypeId));
+		ResultSet result = database.getResult("SELECT * FROM usertype WHERE usertypeid = ?", Arrays.asList(userTypeId));
 		if(result.next()) 
 			userType = new UserType(result.getInt(1), result.getString(2));
 		return userType;

@@ -17,7 +17,7 @@ public class Database {
     static final String DB_URL = "jdbc:mysql://localhost/eclinical";
     //  Database credentials
     static final String USER = "root";
-    static final String PASS = "";
+    static final String PASS = "xsronsocheata";
     
 	private Database() {}
 	public Connection getConnection() throws SQLException, ClassNotFoundException {
