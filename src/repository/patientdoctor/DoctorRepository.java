@@ -17,8 +17,8 @@ public class DoctorRepository {
 			doctorRepository = new DoctorRepository();
 		return doctorRepository;
 	}
-	public boolean saveDoctor(Person doctor) {
-		boolean isSuccess = false;
+	public int saveDoctor(Person doctor) {
+		int doctorId = 0;
 		try {
 			if(doctor != null) {
 				//load auto patientNumber here
@@ -27,13 +27,13 @@ public class DoctorRepository {
 					doctor.setPersonNumber("DT#" + result.getInt("doctor_number"));
 				List<Object> parameters = Arrays.asList(doctor.getPersonNumber(), doctor.getFirstName(), 
 						doctor.getMiddleName(), doctor.getLastName(), doctor.getContactPhone(), doctor.getAddress());
-				isSuccess = database.executeStatement("INSERT INTO doctor(doctor_number, firstname, middlename, lastname, contactphone, address) "
+				doctorId = database.executeStatementWithLastInsertedId("INSERT INTO doctor(doctor_number, firstname, middlename, lastname, contactphone, address) "
 						+ "VALUES(?, ?, ?, ?, ?, ?)", parameters);
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
-		return isSuccess;
+		return doctorId;
 	}
 	public List<Person> loadDoctors() {
 		List<Person> doctors = new ArrayList<>();

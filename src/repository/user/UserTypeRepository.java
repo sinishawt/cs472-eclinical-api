@@ -17,55 +17,35 @@ public class UserTypeRepository {
 			userTypeRepository = new UserTypeRepository();
 		return userTypeRepository;
 	}
-	public boolean saveUserType(UserType userType) {
+	public boolean saveUserType(UserType userType) throws Exception {
 		boolean isSuccess = false;
-		try {
-			if(userType != null) 
-				isSuccess = database.executeStatement("INSERT into usertype(usertypename) VALUES(?)", Arrays.asList(userType.getUserTypeName()));
-		}catch(Exception ex) {
-			ex.printStackTrace();
-		}
+		if(userType != null) 
+			isSuccess = database.executeStatement("INSERT into usertype(usertypename) VALUES(?)", Arrays.asList(userType.getUserTypeName()));
 		return isSuccess;
 	}
-	public List<UserType> loadUserTypes() {
+	public List<UserType> loadUserTypes() throws Exception {
 		List<UserType> userTypes = new ArrayList<>();
-		try {
-			ResultSet result = database.getResult("SELECT * FROM usertype", null);
-			while(result.next()) {
-				userTypes.add(new UserType(result.getInt(1), result.getString(2)));
-			}
-		}catch(Exception ex) {
-			ex.printStackTrace();
+		ResultSet result = database.getResult("SELECT * FROM usertype", null);
+		while(result.next()) {
+			userTypes.add(new UserType(result.getInt(1), result.getString(2)));
 		}
 		return userTypes;
 	}
-	public UserType loadUserTypeById(int userTypeId) {
+	public UserType loadUserTypeById(int userTypeId) throws Exception {
 		UserType userType = new UserType();
-		try {
-			ResultSet result = database.getResult("SELECT * FROM usertype WHERE usertypeid", Arrays.asList(userTypeId));
-			if(result.next()) 
-				userType = new UserType(result.getInt(1), result.getString(2));
-		}catch(Exception ex) {
-			ex.printStackTrace();
-		}
+		ResultSet result = database.getResult("SELECT * FROM usertype WHERE usertypeid", Arrays.asList(userTypeId));
+		if(result.next()) 
+			userType = new UserType(result.getInt(1), result.getString(2));
 		return userType;
 	}
-	public boolean deleteUserTypeById(int userTypeId) {
+	public boolean deleteUserTypeById(int userTypeId) throws Exception {
 		boolean isSuccess = false;
-		try {
-			isSuccess = database.executeStatement("DELETE FROM usertype where usertypeid = ?", Arrays.asList(userTypeId));
-		}catch(Exception ex) {
-			ex.printStackTrace();
-		}
+		isSuccess = database.executeStatement("DELETE FROM usertype where usertypeid = ?", Arrays.asList(userTypeId));
 		return isSuccess;
 	}
-	public boolean updateUserTypeById(UserType userType) {
+	public boolean updateUserTypeById(UserType userType) throws Exception {
 		boolean isSuccess = false;
-		try {
-			isSuccess = database.executeStatement("UPDATE usertype SET usertypename = ? WHERE usertypeid = ?", Arrays.asList(userType.getUserTypeName(), userType.getUserTypeId()));
-		}catch(Exception ex) {
-			ex.printStackTrace();
-		}
+		isSuccess = database.executeStatement("UPDATE usertype SET usertypename = ? WHERE usertypeid = ?", Arrays.asList(userType.getUserTypeName(), userType.getUserTypeId()));
 		return isSuccess;
 	}
 }

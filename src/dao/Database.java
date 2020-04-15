@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class Database {
@@ -46,6 +47,23 @@ public class Database {
 			ex.printStackTrace();
 		}
 		return isSuccess;
+	}
+	public int executeStatementWithLastInsertedId(String sql, List<Object> objects) {
+		int lastInsertedId = 0;
+		try {
+			statement = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			if(objects != null) {
+				for(int i=0; i<objects.size(); i++)
+					statement.setObject(i + 1, objects.get(i));
+			}
+			statement.execute();
+			ResultSet rs = statement.getGeneratedKeys();
+			if (rs.next()) 
+				lastInsertedId = rs.getInt(1);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return lastInsertedId;
 	}
 	public ResultSet getResult(String sql, List<Object> objects) {
 		try {

@@ -5,6 +5,11 @@ public class UserType {
 	private String userTypeName;
 	public UserType() {}
 	
+	public UserType(String userTypeName) {
+		super();
+		this.userTypeName = userTypeName;
+	}
+
 	public UserType(int userTypeId) {
 		super();
 		this.userTypeId = userTypeId;

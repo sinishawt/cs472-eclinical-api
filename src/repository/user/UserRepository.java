@@ -103,4 +103,30 @@ public class UserRepository {
 		}
 		return isSuccess;
 	}
+	
+	public User login(String username, String password) {
+		User user = null;
+		UserTypeRepository userTypeRepo = UserTypeRepository.getInstance();
+		PatientRepository patientRepo = PatientRepository.getInstance();
+		DoctorRepository doctorRepo = DoctorRepository.getInstance();
+		try {
+			ResultSet userResult = database.getResult("SELECT * FROM user WHERE username = ? AND password = ? AND islock = 0", Arrays.asList(username, password));
+			if(userResult.next()) {
+				UserType userType = userTypeRepo.loadUserTypeById(userResult.getInt("usertypeid"));
+				
+				Person patientOrDoctor = new Person();
+				if(userType.getUserTypeId() == 2) //patient
+					patientOrDoctor = patientRepo.loadPatientById(userResult.getInt("patientordoctorid"));
+				else if(userType.getUserTypeId() == 3) //doctor
+					patientOrDoctor = doctorRepo.loadDoctorById(userResult.getInt("patientordoctorid"));
+						
+				user = new User(userResult.getInt("userid"), userResult.getString("username"), 
+								userResult.getString("password"), userResult.getBoolean("islock"), 
+								userType, patientOrDoctor);
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return user;
+	}
 }

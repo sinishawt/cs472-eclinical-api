@@ -4,6 +4,12 @@ public class DoctorSpecialization {
 	private int doctorSpecializationId;
 	private Specialization specialiation;
 	private Person doctor;
+	
+	public DoctorSpecialization(Specialization specialiation, Person doctor) {
+		super();
+		this.specialiation = specialiation;
+		this.doctor = doctor;
+	}
 	public DoctorSpecialization(int doctorSpecializationId, Specialization specialiation, Person doctor) {
 		super();
 		this.doctorSpecializationId = doctorSpecializationId;
